@@ -4,7 +4,7 @@
   "description": "",
   "homepage": "https://IhorLyskov.github.io/goit-js-hw-08",
   "scripts": {
-    "start": "parcel src/*.html",
+    "dev": "parcel src/*.html",
     "build": "parcel build src/*.html --public-url /goit-js-hw-08/",
     "test": "parcel build src/*.html"
   },
