@@ -21,7 +21,6 @@ function createGalleryMarkup(galleryItems) {
 }
 
 const galleryContainer = document.querySelector('.gallery');
-console.log(galleryContainer);
 galleryContainer.innerHTML = createGalleryMarkup(galleryItems);
 const gallery = new SimpleLightbox('.gallery a', {
   captionsData: 'alt',
