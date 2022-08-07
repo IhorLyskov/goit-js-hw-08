@@ -6,7 +6,7 @@
   "scripts": {
     "start": "parcel src/*.html",
     "build": "parcel build src/*.html --public-url /goit-js-hw-08/",
-    "test": "parcel build src/*.html"
+    "local": "parcel build src/*.html --public-url /dist/"
   },
   "repository": {
     "type": "git",
