@@ -15,7 +15,6 @@ window.addEventListener('load', function (event) {
           'The time was less than 0 or greater than the video’s duration'
         );
         break;
-
       default:
         console.log('Some other error occurred');
     }
