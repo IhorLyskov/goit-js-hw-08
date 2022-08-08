@@ -5,8 +5,7 @@ const vimeoPlayer = new Vimeo('vimeo-player');
 
 vimeoPlayer.setVolume(0);
 
-const currentTime = 0;
-//Number(localStorage.getItem('videoplayer-current-time'));
+const currentTime = Number(localStorage.getItem('videoplayer-current-time'));
 
 window.addEventListener('load', function (event) {
   vimeoPlayer.setCurrentTime(currentTime).catch(function (error) {
