@@ -8,23 +8,18 @@ vimeoPlayer.setVolume(0);
 const currentTime = Number(localStorage.getItem('videoplayer-current-time'));
 
 window.addEventListener('load', function (event) {
-  vimeoPlayer
-    .setCurrentTime(currentTime)
-    .then(function (time) {
-      console.log(`Start time: ${timeString(time)}`);
-    })
-    .catch(function (error) {
-      switch (error.name) {
-        case 'RangeError':
-          console.log(
-            'The time was less than 0 or greater than the video’s duration'
-          );
-          break;
+  vimeoPlayer.setCurrentTime(currentTime).catch(function (error) {
+    switch (error.name) {
+      case 'RangeError':
+        console.log(
+          'The time was less than 0 or greater than the video’s duration'
+        );
+        break;
 
-        default:
-          console.log('Some other error occurred');
-      }
-    });
+      default:
+        console.log('Some other error occurred');
+    }
+  });
 });
 
 vimeoPlayer.on(
@@ -37,6 +32,7 @@ vimeoPlayer.on(
 
 vimeoPlayer.getVideoTitle().then(function (title) {
   console.log('title:', title);
+  console.log(`Start time: ${timeString(currentTime)}`);
 });
 
 function timeString(time) {
