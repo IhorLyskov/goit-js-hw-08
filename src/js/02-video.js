@@ -1,33 +1,46 @@
 import Vimeo from '@vimeo/player';
+import _ from 'lodash';
 
 const vimeoPlayer = new Vimeo('vimeo-player');
 
-let vimeoPlayerTime = { 'ideoplayer-current-time': 0 };
+vimeoPlayer.setVolume(0);
 
-vimeoPlayer
-  .setCurrentTime(vimeoPlayerTime['ideoplayer-current-time'])
-  .then(function (seconds) {
-    console.log(seconds);
-  })
-  .catch(function (error) {
-    switch (error.name) {
-      case 'RangeError':
-        console.log(
-          'The time was less than 0 or greater than the video’s duration'
-        );
-        break;
+const currentTime = Number(localStorage.getItem('videoplayer-current-time'));
 
-      default:
-        console.log('Some other error occurred');
-    }
-  });
+window.addEventListener('load', function (event) {
+  vimeoPlayer
+    .setCurrentTime(currentTime)
+    .then(function (time) {
+      console.log(`Start time: ${timeString(time)}`);
+    })
+    .catch(function (error) {
+      switch (error.name) {
+        case 'RangeError':
+          console.log(
+            'The time was less than 0 or greater than the video’s duration'
+          );
+          break;
 
-vimeoPlayer.on('timeupdate', function (data) {
-  vimeoPlayerTime['ideoplayer-current-time'] = data.seconds;
-  console.log(`on - ${vimeoPlayerTime['ideoplayer-current-time']}`);
+        default:
+          console.log('Some other error occurred');
+      }
+    });
 });
+
+vimeoPlayer.on(
+  'timeupdate',
+  _.throttle(function (data) {
+    localStorage.setItem('videoplayer-current-time', data.seconds);
+    console.log(data.seconds);
+  }, 1000)
+);
 
 vimeoPlayer.getVideoTitle().then(function (title) {
   console.log('title:', title);
-  console.log(`Start time: ${vimeoPlayerTime['ideoplayer-current-time']}`);
 });
+
+function timeString(time) {
+  const date = new Date(0);
+  date.setSeconds(time);
+  return date.toTimeString().slice(3, 8);
+}
