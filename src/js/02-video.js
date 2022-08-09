@@ -1,30 +1,39 @@
 import Vimeo from '@vimeo/player';
-import _ from 'lodash';
+import throttle from 'lodash.throttle';
 
 const vimeoPlayer = new Vimeo('vimeo-player');
 
+const STORAGE_KEY = 'videoplayer-current-time';
+
 vimeoPlayer.setVolume(0);
 
-const currentTime = Number(localStorage.getItem('videoplayer-current-time'));
+const currentTime = Number(localStorage.getItem(STORAGE_KEY));
 
-window.addEventListener('load', function (event) {
-  vimeoPlayer.setCurrentTime(currentTime).catch(function (error) {
-    switch (error.name) {
-      case 'RangeError':
-        console.log(
-          'The time was less than 0 or greater than the video’s duration'
-        );
-        break;
-      default:
-        console.log('Some other error occurred');
-    }
+if (currentTime) {
+  window.addEventListener('load', function (event) {
+    vimeoPlayer
+      .setCurrentTime(currentTime)
+      .then(function (time) {
+        console.log(`Start time: ${timeString(time)}`);
+      })
+      .catch(function (error) {
+        switch (error.name) {
+          case 'RangeError':
+            console.log(
+              'The time was less than 0 or greater than the video’s duration'
+            );
+            break;
+          default:
+            console.log('Some other error occurred');
+        }
+      });
   });
-});
+}
 
 vimeoPlayer.on(
   'timeupdate',
-  _.throttle(function (data) {
-    localStorage.setItem('videoplayer-current-time', data.seconds);
+  throttle(function (data) {
+    localStorage.setItem(STORAGE_KEY, data.seconds);
     console.log(data.seconds);
   }, 1000)
 );
